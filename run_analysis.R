@@ -15,11 +15,10 @@
 library(dplyr)
 
 # Step 0 - get the data, if necessary:
-# Comment out 3 lines below if data has been retrieved already
-download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip",
-              "./thedata.zip")
-unzip("./thedata.zip")
-
+# Uncomment 3 lines below if data has been retrieved already
+#download.file("https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip",
+#              "./thedata.zip")
+#unzip("./thedata.zip")
 
 # Step 1:
 # Merging training and test data
@@ -90,10 +89,14 @@ df$activity = factor(df$activity,labels = activitylabs$activity_desc)
 rm(activitylabs, allcolnames_unclean, allcols)
 
 # Step 4
-# Tidy up the remaining variable (column) names by removing non-alphanumeric
+# Neaten up the remaining variable (column) names by removing non-alphanumeric
 # characters and converting to lowercase
 colnames(df) = gsub("\\(\\)|-","", tolower(colnames(df)))
 
+# Step 5
 # Generate second data set of average values by subject and activity
 df2 = df %>% group_by(subject,activity) %>%
   summarise_all(funs(mean))
+write.table(df2, "tidytable.txt", row.name=FALSE)
+
+
